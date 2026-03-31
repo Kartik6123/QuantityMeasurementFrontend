@@ -1,0 +1,77 @@
+<div class="dashboard">
+
+  <div class="header">
+    <h2>Welcome, {{ userName }} 👋</h2>
+    <button class="logout-btn" (click)="logout()">Logout</button>
+  </div>
+
+  <!-- TYPE -->
+  <div class="type-box">
+    <button (click)="setType('LENGTH')"      [class.active]="type==='LENGTH'">Length</button>
+    <button (click)="setType('WEIGHT')"      [class.active]="type==='WEIGHT'">Weight</button>
+    <button (click)="setType('TEMPERATURE')" [class.active]="type==='TEMPERATURE'">Temperature</button>
+    <button (click)="setType('VOLUME')"      [class.active]="type==='VOLUME'">Volume</button>
+  </div>
+
+  <!-- MODE -->
+  <div class="slider">
+    <button (click)="setMode('convert')"  [class.active]="mode==='convert'">Convert</button>
+    <button (click)="setMode('add')"      [class.active]="mode==='add'">Add</button>
+    <button (click)="setMode('subtract')" [class.active]="mode==='subtract'">Subtract</button>
+    <button (click)="setMode('divide')"   [class.active]="mode==='divide'">Divide</button>
+    <button (click)="setMode('compare')"  [class.active]="mode==='compare'">Compare</button>
+  </div>
+
+  <!-- INPUTS -->
+  <div class="inputs">
+    <div class="box">
+      <label>FROM</label>
+      <input type="number" [(ngModel)]="value1" name="value1" />
+      <select [(ngModel)]="unit1" name="unit1">
+        <option *ngFor="let u of unitList" [value]="u">{{ u }}</option>
+      </select>
+    </div>
+
+    <div class="box">
+      <label>TO</label>
+      <input type="number" [(ngModel)]="value2" name="value2" />
+      <select [(ngModel)]="unit2" name="unit2">
+        <option *ngFor="let u of unitList" [value]="u">{{ u }}</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- BUTTONS -->
+  <div class="action-row">
+    <button class="action-btn" (click)="perform()">Calculate</button>
+    <button class="history-btn" (click)="loadHistory()">Show History</button>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result" *ngIf="result !== null">
+    ✅ Result: <strong>{{ result }}</strong>
+  </div>
+
+  <!-- ERROR -->
+  <div class="error" *ngIf="error">
+    ❌ {{ error }}
+  </div>
+
+  <!-- HISTORY -->
+  <div class="history" *ngIf="historyLoaded">
+    <h3>Recent History (last 5)</h3>
+    <div *ngIf="history.length === 0">No history found.</div>
+    <div class="history-item" *ngFor="let h of history">
+      <span class="op-tag">{{ h.operation | uppercase }}</span>
+      {{ h.thisValue }} {{ h.thisUnit }}
+      <span *ngIf="h.resultValue !== null && h.resultValue !== undefined">
+        → {{ h.resultValue }} {{ h.resultUnit }}
+      </span>
+      <span *ngIf="h.resultString !== null && h.resultValue === null">
+        → {{ h.resultString }}
+      </span>
+      <span class="err-tag" *ngIf="h.error"> ❌ ERROR</span>
+    </div>
+  </div>
+
+</div>
