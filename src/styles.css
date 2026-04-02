@@ -1,1 +1,71 @@
 /* You can add global styles to this file, and also import other style files */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --brand-dark:    #0f0c1f;
+  --brand-deep:    #1a1630;
+  --brand-purple:  #6c63ff;
+  --brand-violet:  #4f46e5;
+  --brand-teal:    #0fa47b;
+  --brand-light:   #f5f4ff;
+  --brand-muted:   #e8e6ff;
+  --text-primary:  #0f0c1f;
+  --text-secondary:#5a5873;
+  --text-hint:     #9d9ab5;
+  --border-soft:   #e8e6f0;
+  --white:         #ffffff;
+  --success:       #0fa47b;
+  --danger:        #e53e3e;
+  --radius-sm:     8px;
+  --radius-md:     12px;
+  --radius-lg:     18px;
+  --radius-xl:     24px;
+  --shadow-sm:     0 1px 4px rgba(15,12,31,0.06);
+  --shadow-md:     0 4px 20px rgba(15,12,31,0.10);
+  --shadow-lg:     0 12px 48px rgba(15,12,31,0.16);
+}
+
+html, body {
+  height: 100%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: var(--text-primary);
+  background: var(--brand-light);
+  -webkit-font-smoothing: antialiased;
+}
+
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; font-family: 'DM Sans', sans-serif; }
+input, select { font-family: 'DM Sans', sans-serif; }
+
+input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 5px;
+  border-radius: 99px;
+  background: var(--brand-muted);
+  outline: none;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--brand-purple);
+  cursor: pointer;
+  box-shadow: 0 0 0 4px rgba(108,99,255,0.15);
+  transition: box-shadow 0.2s;
+}
+input[type=range]::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 0 6px rgba(108,99,255,0.22);
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--brand-muted); border-radius: 99px; }

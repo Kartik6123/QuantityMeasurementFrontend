@@ -1,77 +1,241 @@
-<div class="dashboard">
+<div class="dash-root">
 
-  <div class="header">
-    <h2>Welcome, {{ userName }} 👋</h2>
-    <button class="logout-btn" (click)="logout()">Logout</button>
-  </div>
-
-  <!-- TYPE -->
-  <div class="type-box">
-    <button (click)="setType('LENGTH')"      [class.active]="type==='LENGTH'">Length</button>
-    <button (click)="setType('WEIGHT')"      [class.active]="type==='WEIGHT'">Weight</button>
-    <button (click)="setType('TEMPERATURE')" [class.active]="type==='TEMPERATURE'">Temperature</button>
-    <button (click)="setType('VOLUME')"      [class.active]="type==='VOLUME'">Volume</button>
-  </div>
-
-  <!-- MODE -->
-  <div class="slider">
-    <button (click)="setMode('convert')"  [class.active]="mode==='convert'">Convert</button>
-    <button (click)="setMode('add')"      [class.active]="mode==='add'">Add</button>
-    <button (click)="setMode('subtract')" [class.active]="mode==='subtract'">Subtract</button>
-    <button (click)="setMode('divide')"   [class.active]="mode==='divide'">Divide</button>
-    <button (click)="setMode('compare')"  [class.active]="mode==='compare'">Compare</button>
-  </div>
-
-  <!-- INPUTS -->
-  <div class="inputs">
-    <div class="box">
-      <label>FROM</label>
-      <input type="number" [(ngModel)]="value1" name="value1" />
-      <select [(ngModel)]="unit1" name="unit1">
-        <option *ngFor="let u of unitList" [value]="u">{{ u }}</option>
-      </select>
+  <!-- ═══════════ SIDEBAR ═══════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+      <span class="brand-name">QuantaConvert</span>
     </div>
 
-    <div class="box">
-      <label>TO</label>
-      <input type="number" [(ngModel)]="value2" name="value2" />
-      <select [(ngModel)]="unit2" name="unit2">
-        <option *ngFor="let u of unitList" [value]="u">{{ u }}</option>
-      </select>
+    <nav class="sidebar-nav">
+      <p class="nav-section-label">Measurements</p>
+
+      <button class="nav-item" [class.active]="type==='LENGTH'" (click)="setType('LENGTH')">
+        <span class="nav-icon-wrap"><i class="fa-solid fa-ruler"></i></span>
+        <span class="nav-label">Length</span>
+        <span class="nav-units">ft · in · yd · cm</span>
+      </button>
+
+      <button class="nav-item" [class.active]="type==='WEIGHT'" (click)="setType('WEIGHT')">
+        <span class="nav-icon-wrap"><i class="fa-solid fa-weight-scale"></i></span>
+        <span class="nav-label">Weight</span>
+        <span class="nav-units">kg · g · lb</span>
+      </button>
+
+      <button class="nav-item" [class.active]="type==='TEMPERATURE'" (click)="setType('TEMPERATURE')">
+        <span class="nav-icon-wrap"><i class="fa-solid fa-temperature-half"></i></span>
+        <span class="nav-label">Temperature</span>
+        <span class="nav-units">°C · °F · K</span>
+      </button>
+
+      <button class="nav-item" [class.active]="type==='VOLUME'" (click)="setType('VOLUME')">
+        <span class="nav-icon-wrap"><i class="fa-solid fa-flask"></i></span>
+        <span class="nav-label">Volume</span>
+        <span class="nav-units">L · mL · gal</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-card">
+        <div class="user-avatar">{{ userName.charAt(0) | uppercase }}</div>
+        <div class="user-info">
+          <p class="user-name">{{ userName }}</p>
+          <p class="user-role">Signed in</p>
+        </div>
+        <button class="logout-btn" (click)="logout()" title="Sign out">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+      </div>
     </div>
-  </div>
+  </aside>
 
-  <!-- BUTTONS -->
-  <div class="action-row">
-    <button class="action-btn" (click)="perform()">Calculate</button>
-    <button class="history-btn" (click)="loadHistory()">Show History</button>
-  </div>
+  <!-- ═══════════ MAIN CONTENT ═══════════ -->
+  <main class="dash-main">
 
-  <!-- RESULT -->
-  <div class="result" *ngIf="result !== null">
-    ✅ Result: <strong>{{ result }}</strong>
-  </div>
-
-  <!-- ERROR -->
-  <div class="error" *ngIf="error">
-    ❌ {{ error }}
-  </div>
-
-  <!-- HISTORY -->
-  <div class="history" *ngIf="historyLoaded">
-    <h3>Recent History (last 5)</h3>
-    <div *ngIf="history.length === 0">No history found.</div>
-    <div class="history-item" *ngFor="let h of history">
-      <span class="op-tag">{{ h.operation | uppercase }}</span>
-      {{ h.thisValue }} {{ h.thisUnit }}
-      <span *ngIf="h.resultValue !== null && h.resultValue !== undefined">
-        → {{ h.resultValue }} {{ h.resultUnit }}
-      </span>
-      <span *ngIf="h.resultString !== null && h.resultValue === null">
-        → {{ h.resultString }}
-      </span>
-      <span class="err-tag" *ngIf="h.error"> ❌ ERROR</span>
+    <!-- Top bar -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <h1 class="page-title">
+          <span *ngIf="type==='LENGTH'"><i class="fa-solid fa-ruler type-icon"></i> Length</span>
+          <span *ngIf="type==='WEIGHT'"><i class="fa-solid fa-weight-scale type-icon"></i> Weight</span>
+          <span *ngIf="type==='TEMPERATURE'"><i class="fa-solid fa-temperature-half type-icon"></i> Temperature</span>
+          <span *ngIf="type==='VOLUME'"><i class="fa-solid fa-flask type-icon"></i> Volume</span>
+        </h1>
+        <p class="page-sub">Welcome back, <strong>{{ userName }}</strong></p>
+      </div>
     </div>
-  </div>
 
+    <!-- ── Operation pills ── -->
+    <div class="ops-bar">
+      <button class="op-pill" [class.active]="mode==='convert'"  (click)="setMode('convert')">
+        <i class="fa-solid fa-right-left"></i> Convert
+      </button>
+      <button class="op-pill" [class.active]="mode==='add'"      (click)="setMode('add')">
+        <i class="fa-solid fa-plus"></i> Add
+      </button>
+      <button class="op-pill" [class.active]="mode==='subtract'" (click)="setMode('subtract')">
+        <i class="fa-solid fa-minus"></i> Subtract
+      </button>
+      <button class="op-pill" [class.active]="mode==='divide'"   (click)="setMode('divide')">
+        <i class="fa-solid fa-divide"></i> Divide
+      </button>
+      <button class="op-pill" [class.active]="mode==='compare'"  (click)="setMode('compare')">
+        <i class="fa-solid fa-equals"></i> Compare
+      </button>
+    </div>
+
+    <!-- ── Inputs card ── -->
+    <div class="card inputs-card">
+      <div class="card-label">
+        <i class="fa-solid fa-sliders"></i> Input values
+      </div>
+
+      <div class="inputs-row">
+
+        <!-- FROM -->
+        <div class="input-block">
+          <label class="input-label">
+            <i class="fa-solid fa-arrow-up-from-bracket"></i> From
+          </label>
+          <div class="input-combo">
+            <input
+              class="num-input"
+              type="number"
+              [(ngModel)]="value1"
+              name="value1"
+            />
+            <select class="unit-select" [(ngModel)]="unit1" name="unit1">
+              <option *ngFor="let u of unitList" [value]="u">{{ u }}</option>
+            </select>
+          </div>
+
+          <!-- Slider for value1 -->
+          <div class="slider-wrap">
+            <input
+              type="range"
+              min="0"
+              max="10000"
+              step="1"
+              [value]="value1"
+              (input)="value1 = +$any($event.target).value"
+              class="qty-slider"
+            />
+            <div class="slider-minmax">
+              <span>0</span><span class="slider-current">{{ value1 }}</span><span>10 000</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- operator badge -->
+        <div class="op-badge">
+          <span *ngIf="mode==='convert'"><i class="fa-solid fa-right-left"></i></span>
+          <span *ngIf="mode==='add'"><i class="fa-solid fa-plus"></i></span>
+          <span *ngIf="mode==='subtract'"><i class="fa-solid fa-minus"></i></span>
+          <span *ngIf="mode==='divide'"><i class="fa-solid fa-divide"></i></span>
+          <span *ngIf="mode==='compare'"><i class="fa-solid fa-equals"></i></span>
+        </div>
+
+        <!-- TO -->
+        <div class="input-block" [class.convert-target]="mode === 'convert'">
+          <label class="input-label">
+            <i class="fa-solid fa-arrow-down-to-bracket"></i> To
+          </label>
+
+          <!-- Convert mode: only show unit selector -->
+          <ng-container *ngIf="mode === 'convert'">
+            <select class="unit-select unit-select--full" [(ngModel)]="unit2" name="unit2">
+              <option *ngFor="let u of unitList" [value]="u">{{ u }}</option>
+            </select>
+          </ng-container>
+
+          <!-- Other modes: show full input + slider -->
+          <ng-container *ngIf="mode !== 'convert'">
+            <div class="input-combo">
+              <input
+                class="num-input"
+                type="number"
+                [(ngModel)]="value2"
+                name="value2"
+              />
+              <select class="unit-select" [(ngModel)]="unit2" name="unit2">
+                <option *ngFor="let u of unitList" [value]="u">{{ u }}</option>
+              </select>
+            </div>
+
+            <!-- Slider for value2 -->
+            <div class="slider-wrap">
+              <input
+                type="range"
+                min="0"
+                max="10000"
+                step="1"
+                [value]="value2"
+                (input)="value2 = +$any($event.target).value"
+                class="qty-slider"
+              />
+              <div class="slider-minmax">
+                <span>0</span><span class="slider-current">{{ value2 }}</span><span>10 000</span>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+
+      </div><!-- /inputs-row -->
+
+      <!-- Action row -->
+      <div class="action-row">
+        <button class="btn-calculate" (click)="perform()">
+          <i class="fa-solid fa-bolt"></i> Calculate
+        </button>
+        <button class="btn-history" (click)="loadHistory()">
+          <i class="fa-solid fa-clock-rotate-left"></i> Show history
+        </button>
+      </div>
+    </div><!-- /inputs-card -->
+
+    <!-- ── Result card ── -->
+    <div class="card result-card" *ngIf="result !== null">
+      <div class="result-icon"><i class="fa-solid fa-circle-check"></i></div>
+      <div class="result-body">
+        <p class="result-label">Result</p>
+        <p class="result-value">{{ result }}</p>
+      </div>
+    </div>
+
+    <!-- ── Error card ── -->
+    <div class="card error-card" *ngIf="error">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <span>{{ error }}</span>
+    </div>
+
+    <!-- ── History card ── -->
+    <div class="card history-card" *ngIf="historyLoaded">
+      <div class="history-header">
+        <span><i class="fa-solid fa-clock-rotate-left"></i> Recent history</span>
+        <span class="history-count">Last 5 operations</span>
+      </div>
+
+      <div class="history-empty" *ngIf="history.length === 0">
+        <i class="fa-regular fa-folder-open"></i> No history found for this operation.
+      </div>
+
+      <div class="history-list">
+        <div class="history-item" *ngFor="let h of history">
+          <span class="op-tag op-tag--{{ h.operation }}">{{ h.operation | uppercase }}</span>
+          <span class="hist-from">{{ h.thisValue }} {{ h.thisUnit }}</span>
+          <span class="hist-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+          <span class="hist-to" *ngIf="h.resultValue !== null && h.resultValue !== undefined">
+            {{ h.resultValue }} {{ h.resultUnit }}
+          </span>
+          <span class="hist-to" *ngIf="h.resultString !== null && h.resultValue === null">
+            {{ h.resultString }}
+          </span>
+          <span class="hist-err" *ngIf="h.error">
+            <i class="fa-solid fa-circle-xmark"></i> Error
+          </span>
+        </div>
+      </div>
+    </div><!-- /history-card -->
+
+  </main>
 </div>
