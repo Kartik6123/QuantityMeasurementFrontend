@@ -1,0 +1,107 @@
+/* ============================================================
+   variables.css — Design tokens & global resets
+   QuantaConvert | UI-only build (localStorage)
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Brand colours */
+  --ink:         #08070f;
+  --ink-2:       #2e2c3e;
+  --ink-3:       #6b6885;
+  --ink-4:       #b0adc7;
+  --paper:       #faf9ff;
+  --panel:       #12101e;
+  --panel-2:     #1c1930;
+  --accent:      #7c6dfa;
+  --accent-2:    #5b4fdd;
+  --teal:        #0bc5a0;
+  --danger:      #f04d5e;
+  --success:     #0bc5a0;
+
+  /* Borders */
+  --border:      #e8e5f5;
+  --border-d:    rgba(255, 255, 255, 0.07);
+
+  /* Border-radius scale */
+  --r-sm:   9px;
+  --r-md:   14px;
+  --r-lg:   20px;
+  --r-xl:   28px;
+  --r-full: 999px;
+
+  /* Shadows */
+  --sh-sm: 0 2px 8px  rgba(8, 7, 15, 0.06);
+  --sh-md: 0 6px 28px rgba(8, 7, 15, 0.10);
+  --sh-lg: 0 16px 56px rgba(8, 7, 15, 0.16);
+
+  /* Typography */
+  --ff-head: 'Syne', sans-serif;
+  --ff-body: 'Outfit', sans-serif;
+
+  /* Transition duration */
+  --dur: 0.22s;
+}
+
+/* ── Base ── */
+html, body {
+  height: 100%;
+  font-family: var(--ff-body);
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+a  { text-decoration: none; color: inherit; }
+button { cursor: pointer; font-family: var(--ff-body); border: none; background: none; }
+input, select { font-family: var(--ff-body); }
+
+/* ── Custom scrollbar ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+/* ── Range input ── */
+input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 99px;
+  background: var(--border);
+  outline: none;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  box-shadow: 0 0 0 4px rgba(124, 109, 250, 0.15);
+  transition: box-shadow var(--dur);
+}
+input[type=range]::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 0 7px rgba(124, 109, 250, 0.2);
+}
+
+/* ── Shared animations ── */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25%       { transform: translateX(-6px); }
+  75%       { transform: translateX(6px); }
+}

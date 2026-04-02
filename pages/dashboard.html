@@ -1,0 +1,200 @@
+<!-- ============================================================
+     pages/dashboard.html — Dashboard page component
+     QuantaConvert | UI-only build (localStorage)
+     Included via: index.html
+     ============================================================ -->
+
+<div id="page-dashboard" style="display:none; flex:1; min-height:100vh">
+
+  <!-- ════════════════ SIDEBAR ════════════════ -->
+  <aside class="sidebar">
+
+    <div class="sidebar-brand">
+      <div class="brand-icon">
+        <i class="fa-solid fa-scale-balanced"></i>
+      </div>
+      <span class="brand-name">QuantaConvert</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <p class="nav-section-label">Measurements</p>
+
+      <button class="nav-item active" id="nav-LENGTH"
+              onclick="Dashboard.setType('LENGTH')">
+        <span class="nav-icon-wrap"><i class="fa-solid fa-ruler"></i></span>
+        <span class="nav-label">Length</span>
+        <span class="nav-units">ft · in · cm</span>
+      </button>
+
+      <button class="nav-item" id="nav-WEIGHT"
+              onclick="Dashboard.setType('WEIGHT')">
+        <span class="nav-icon-wrap"><i class="fa-solid fa-weight-scale"></i></span>
+        <span class="nav-label">Weight</span>
+        <span class="nav-units">kg · g · lb</span>
+      </button>
+
+      <button class="nav-item" id="nav-TEMPERATURE"
+              onclick="Dashboard.setType('TEMPERATURE')">
+        <span class="nav-icon-wrap"><i class="fa-solid fa-temperature-half"></i></span>
+        <span class="nav-label">Temperature</span>
+        <span class="nav-units">°C · °F · K</span>
+      </button>
+
+      <button class="nav-item" id="nav-VOLUME"
+              onclick="Dashboard.setType('VOLUME')">
+        <span class="nav-icon-wrap"><i class="fa-solid fa-flask"></i></span>
+        <span class="nav-label">Volume</span>
+        <span class="nav-units">L · mL · gal</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-card">
+        <div class="user-avatar" id="user-avatar">A</div>
+        <div class="user-info">
+          <p class="user-name" id="user-name-display">User</p>
+          <p class="user-role">Signed in</p>
+        </div>
+        <button class="logout-btn" onclick="Auth.logout()" title="Sign out">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ════════════════ MAIN CONTENT ════════════════ -->
+  <main class="dash-main">
+
+    <!-- Top bar -->
+    <div class="topbar">
+      <h1 class="page-title" id="page-type-title">
+        <i class="fa-solid fa-ruler type-icon"></i> Length
+      </h1>
+      <p class="page-sub">
+        Welcome back, <strong id="welcome-name">User</strong>
+      </p>
+    </div>
+
+    <!-- Operation pills -->
+    <div class="ops-bar">
+      <button class="op-pill active" id="pill-convert"
+              onclick="Dashboard.setMode('convert')">
+        <i class="fa-solid fa-right-left"></i> Convert
+      </button>
+      <button class="op-pill" id="pill-add"
+              onclick="Dashboard.setMode('add')">
+        <i class="fa-solid fa-plus"></i> Add
+      </button>
+      <button class="op-pill" id="pill-subtract"
+              onclick="Dashboard.setMode('subtract')">
+        <i class="fa-solid fa-minus"></i> Subtract
+      </button>
+      <button class="op-pill" id="pill-divide"
+              onclick="Dashboard.setMode('divide')">
+        <i class="fa-solid fa-divide"></i> Divide
+      </button>
+      <button class="op-pill" id="pill-compare"
+              onclick="Dashboard.setMode('compare')">
+        <i class="fa-solid fa-equals"></i> Compare
+      </button>
+    </div>
+
+    <!-- ── Inputs card ── -->
+    <div class="card">
+      <div class="card-label">
+        <i class="fa-solid fa-sliders"></i> Input values
+      </div>
+
+      <div class="inputs-row">
+
+        <!-- FROM -->
+        <div class="input-block">
+          <div class="input-label">
+            <i class="fa-solid fa-arrow-up-from-bracket"></i> From
+          </div>
+          <div class="input-combo">
+            <input class="num-input" id="value1" type="number" value="1"
+                   oninput="Dashboard.syncSlider(1)"/>
+            <select class="unit-select" id="unit1"></select>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" min="0" max="10000" step="1"
+                   id="slider1" value="1"
+                   oninput="Dashboard.syncInput(1)"/>
+            <div class="slider-minmax">
+              <span>0</span>
+              <span class="slider-current" id="cur1">1</span>
+              <span>10 000</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Operator badge -->
+        <div class="op-badge" id="op-badge">
+          <i class="fa-solid fa-right-left"></i>
+        </div>
+
+        <!-- TO -->
+        <div class="input-block">
+          <div class="input-label">
+            <i class="fa-solid fa-arrow-down-to-bracket"></i> To
+          </div>
+          <div class="input-combo">
+            <input class="num-input" id="value2" type="number" value="0"
+                   oninput="Dashboard.syncSlider(2)"/>
+            <select class="unit-select" id="unit2"></select>
+          </div>
+          <div class="slider-wrap">
+            <input type="range" min="0" max="10000" step="1"
+                   id="slider2" value="0"
+                   oninput="Dashboard.syncInput(2)"/>
+            <div class="slider-minmax">
+              <span>0</span>
+              <span class="slider-current" id="cur2">0</span>
+              <span>10 000</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /inputs-row -->
+
+      <div class="action-row">
+        <button class="btn-calculate" onclick="Dashboard.perform()">
+          <i class="fa-solid fa-bolt"></i> Calculate
+        </button>
+        <button class="btn-history" onclick="Dashboard.toggleHistory()">
+          <i class="fa-solid fa-clock-rotate-left"></i> History
+        </button>
+      </div>
+    </div><!-- /inputs card -->
+
+    <!-- ── Result card ── -->
+    <div class="card result-card" id="result-card" style="display:none">
+      <div class="result-icon">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+      <div class="result-body">
+        <p class="result-label">Result</p>
+        <p class="result-value" id="result-value">—</p>
+      </div>
+    </div>
+
+    <!-- ── Error card ── -->
+    <div class="card error-card" id="error-card" style="display:none">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <span id="error-text"></span>
+    </div>
+
+    <!-- ── History card ── -->
+    <div class="card history-card" id="history-card" style="display:none">
+      <div class="history-header">
+        <span><i class="fa-solid fa-clock-rotate-left"></i> Recent history</span>
+        <span class="history-count">Last 10 operations</span>
+      </div>
+      <div id="history-body"></div>
+    </div>
+
+  </main>
+
+</div>
